@@ -1,0 +1,46 @@
+#!/bin/bash
+# Description: The script creates venv and installs linters
+##############################################################################
+# The script should abort in case of an error
+set -e 
+set -o pipefail
+##############################################################################
+
+install_package()
+{
+  echo $line
+  echo 'installing the package: '$package
+  venv/bin/python -m pip install -U $package
+  echo $line
+}
+##############################################################################
+python=python3.11
+line=-------------------------------------------------------------------------
+echo $line
+echo 'Creating venv for '$python'...'
+
+$python -m venv venv
+
+echo $line
+echo 'Upgrading pip...'
+venv/bin/python -m pip install --upgrade pip
+
+packages='prospector
+  flake8
+  pycodestyle
+  autopep8
+  mypy
+  types-requests
+  types-aiofiles
+  types-redis'
+
+for package in $packages
+do
+  install_package
+done
+
+echo 'Done. Version: venv/bin/python -V'
+venv/bin/python -V
+
+echo $line
+

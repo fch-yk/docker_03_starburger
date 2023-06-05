@@ -1,0 +1,60 @@
+#!/usr/bin/bash
+set -e 
+set -o pipefail
+
+project_unit=d_10_02_sb
+line=-----------------------------------------------------------------------------
+
+echo $line
+echo "remote repositories:"
+git remote -v
+
+echo $line
+echo "pull:"
+git pull
+
+echo $line
+echo "Install python packages..."
+venv102/bin/pip install -r requirements.txt
+
+echo $line
+echo "Install node.js packages..."
+npm ci --dev
+
+echo $line
+echo "building node.js frontend..."
+./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"
+
+echo $line
+echo "Collect static..."
+venv102/bin/python manage.py collectstatic --noinput
+
+echo $line
+echo migrate...
+venv102/bin/python manage.py migrate --noinput
+
+
+echo $line
+echo "restart the project unit "$project_unit"..."
+systemctl restart $project_unit
+systemctl status $project_unit
+
+echo $line
+echo "reload nginx..."
+systemctl reload nginx
+systemctl status nginx
+
+echo $line
+echo "send the deploy message to rollbar.com..."
+source .env
+revision=$(git rev-parse --verify HEAD)
+file_name=`basename "$0"`
+curl -H "X-Rollbar-Access-Token: "$POST_SERVER_ITEM_ACCESS_TOKEN -H "Content-Type: application/json" -X POST 'https://api.rollbar.com/api/1/deploy' -d '{"environment": "'${ENVIRONMENT}'", "revision": "'$revision'", "local_username": "'$USER'", "comment": "script: '$file_name'", "status": "succeeded"}'
+
+
+echo $line
+echo "The deploy completed successfully!"
+
+echo $line
+
+
