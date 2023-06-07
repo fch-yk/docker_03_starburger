@@ -1,0 +1,33 @@
+services:
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - type: volume
+        source: media
+        target: /app/media
+      - type: volume
+        source: db
+        target: /app/db
+    ports:
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: host
+    env_file: .env
+    container_name: starburger-backend-dev
+    profiles:
+      - dev
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
+    container_name: starburger-frontend
+
+volumes:
+  media:
+  db:

@@ -1,0 +1,9 @@
+node_modules
+.*
+create_venv
+deploy
+Dockerfile-backend
+Dockerfile-frontend
+.dockerignore
+README.md
+venv

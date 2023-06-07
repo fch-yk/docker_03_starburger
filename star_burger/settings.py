@@ -1,7 +1,6 @@
 import os
 
 from environs import Env
-from git import Repo
 
 env = Env()
 env.read_env()
@@ -144,6 +143,5 @@ if ROLLBAR_ON:
         'access_token': env('ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN'),
         'environment': env('ROLLBAR_ENVIRONMENT', 'development'),
         'code_version': '1.0',
-        'branch': Repo(path=BASE_DIR).active_branch.name,
         'root': BASE_DIR,
     }
