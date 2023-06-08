@@ -9,23 +9,16 @@ The example of the website is [here](https://yksb.freemyip.com/).
 ## Prerequisites
 
 - Python 3.11;
-- [Node.js](https://nodejs.org/en/) (v.10 or higher).
+- [Docker Desktop](https://docs.docker.com/desktop/) or
+- [Docker Engine](https://docs.docker.com/engine/install/) and [the Compose plugin](https://docs.docker.com/compose/install/linux/);
+
+The project was tested with Docker version 23.0.5 and Docker Compose version v2.17.3
 
 ## Installation
 
-- Download the project files.
-- It is recommended to use [venv](https://docs.python.org/3/library/venv.html?highlight=venv#module-venv) for project isolation.
-- Go to the root directory of the project and set up packages:
-
-```bash
-pip install -r requirements.txt
-```
-
-```bash
-npm ci --dev
-```
-
-- Set up environmental variables in your operating system or in the .env file. The variables are:
+- Download the project files;
+- Go to the root directory of the project;
+- Set up environmental variables in the .env file. The variables are:
 
   - `SECRET_KEY` - a secret key for a particular Django installation (obligatory);
   - `DEBUG` - a boolean that turns on/off debug mode (optional, `True` by default);
@@ -36,7 +29,8 @@ npm ci --dev
   - `ROLLBAR_ON` - a boolean that turns on/off [rollbar.com tracking platform](https://rollbar.com/) (optional, `False` by default)
   - `ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN` - a token to set an error report to the [rollbar.com tracking platform](https://rollbar.com/) (obligatory only in the case when `ROLLBAR_ON` is `True`);
   - `ROLLBAR_ENVIRONMENT` - a string that describes the current environment, for example `development` or `production` (optional, `development` by default). It is used in an error report to the [rollbar.com tracking platform](https://rollbar.com/);
-  - `DATABASE_URL` - a database URL, see [URL schema](https://github.com/jazzband/dj-database-url#url-schema) for more (obligatory)
+  - `DATABASE_URL` - a database URL, see [URL schema](https://github.com/jazzband/dj-database-url#url-schema) for more (obligatory);
+  - `POSTGRES_PASSWORD` is required for you to use the PostgreSQL image (obligatory), go to the [Docker hub](https://hub.docker.com/_/postgres) for more;
 
 To set up variables in .env file, create it in the root directory of the project and fill it up like this:
 
@@ -51,46 +45,41 @@ ROLLBAR_ON=True
 ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN=replace_me
 ROLLBAR_ENVIRONMENT=development
 DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/BASE_NAME
+POSTGRES_PASSWORD=replace_me
 ```
 
-- Create SQLite database:
+### Development installation
+
+Build the images and run the app stack:
 
 ```bash
-python manage.py migrate
+docker compose --profile dev up -d --build
+```
+
+### Adding a superuser
+
+- Find out the `backend-dev` container id:
+
+```bash
+docker ps | grep backend-dev
 ```
 
 - Create a superuser:
 
 ```bash
-python manage.py createsuperuser
+docker exec -it {container_id} python manage.py createsuperuser
 ```
 
-## Start
-
-- Run a development server:
-
-```bash
-python manage.py runserver
-```
-
-- Run a frontend:
-
-```bash
-./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
-```
+### Usage
 
 - Go to [the admin site](http://127.0.0.1:8000/admin/) and fill the base;
 - Go to [the home page](http://127.0.0.1:8000/).
 
-## Updating the code on the server
-
-Run:
-
-```bash
-./deploy
-```
-
 ## Interfaces
+
+### Admin site
+
+Go to [the admin site](http://127.0.0.1:8000/admin/) and fill the base;
 
 ### Home page
 
