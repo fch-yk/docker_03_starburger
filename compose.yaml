@@ -3,10 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-backend
+    container_name: starburger-backend
     depends_on:
       - frontend
       - db
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: gunicorn star_burger.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - type: volume
         source: media
@@ -17,17 +18,17 @@ services:
         protocol: tcp
         mode: host
     env_file: .env
-    container_name: starburger-backend-dev
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile-frontend
-    command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
     container_name: starburger-frontend
+    command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
 
   db:
     image: postgres:15.3-alpine
+    container_name: starburger-db
     volumes:
       - type: volume
         source: postgres
