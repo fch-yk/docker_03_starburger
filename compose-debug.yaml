@@ -6,16 +6,30 @@ services:
     depends_on:
       - frontend
       - db
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command:
+      [
+        "sh",
+        "-c",
+        "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --nothreading --noreload"
+      ]
+
     volumes:
       - type: volume
         source: media
         target: /app/media
+      - type: bind
+        source: .
+        target: /app
     ports:
       - target: 8000
         published: 8000
         protocol: tcp
         mode: host
+      - target: 5678
+        published: 5678
+        protocol: tcp
+        mode: host
+
     env_file: .env
     container_name: starburger-backend-dev
 
@@ -33,6 +47,7 @@ services:
         source: postgres
         target: /var/lib/postgresql/data/
     env_file: .env
+    container_name: starburger-db
 
 volumes:
   media:

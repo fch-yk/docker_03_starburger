@@ -11,6 +11,9 @@ services:
       - type: volume
         source: media
         target: /app/media
+      - type: bind
+        source: .
+        target: /app
     ports:
       - target: 8000
         published: 8000

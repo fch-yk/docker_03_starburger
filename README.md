@@ -53,7 +53,7 @@ POSTGRES_PASSWORD=replace_me
 Build the images and run the app stack:
 
 ```bash
-docker compose --profile dev up -d --build
+docker compose -f compose-dev.yaml up -d --build
 ```
 
 ### Adding a superuser
@@ -110,6 +110,53 @@ A developer can use [the browsable API interface](http://127.0.0.1:8000/api/orde
 - Press "POST".
 
 ![browsable API](./screenshots/developer_ui.gif)
+
+## Debugging with VSCode
+
+Add a launch configuration to the `.vscode/launch.json` file:
+
+```json
+{
+  "configurations": [
+    {
+      "name": "Python: Remote Attach",
+      "type": "python",
+      "request": "attach",
+      "port": 5678,
+      "host": "localhost",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}",
+          "remoteRoot": "/app"
+        }
+      ]
+    }
+  ]
+}
+```
+
+To debug , run:
+
+```bash
+docker compose -f compose-debug.yaml up -d --build
+```
+
+To debug with hot reloading, run:
+
+```bash
+docker compose -f compose-debug-reload.yaml up -d --build
+```
+
+Press `F5` to start debugging.
+
+_Note_: when debugging with hot reloading, uncheck the `Uncaught Exceptions` flag on the `Run and Debug` panel. This can help to avoid the annoing `Exception has occurred: SystemExit` message each time when you save an app file.
+
+To find out more about debugging in Docker containers, see the VSCode documentation:
+
+- [Debug Python within a container](https://code.visualstudio.com/docs/containers/debug-python);
+- [Debug Python with Docker Compose](https://code.visualstudio.com/docs/containers/docker-compose#_python);
+- [How to enable hot reloading in Django or Flask apps](https://code.visualstudio.com/docs/containers/debug-python#_how-to-enable-hot-reloading-in-django-or-flask-apps);
+
 
 ## Project goals
 
