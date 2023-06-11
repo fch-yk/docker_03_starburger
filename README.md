@@ -31,6 +31,7 @@ The project was tested with Docker version 23.0.5 and Docker Compose version v2.
   - `ROLLBAR_ENVIRONMENT` - a string that describes the current environment, for example `development` or `production` (optional, `development` by default). It is used in an error report to the [rollbar.com tracking platform](https://rollbar.com/);
   - `DATABASE_URL` - a database URL, see [URL schema](https://github.com/jazzband/dj-database-url#url-schema) for more (obligatory);
   - `POSTGRES_PASSWORD` is required for you to use the PostgreSQL image (obligatory), go to the [Docker hub](https://hub.docker.com/_/postgres) for more;
+  - `CSRF_TRUSTED_ORIGINS` is required for admin site correct work (go [here](https://stackoverflow.com/questions/71319284/django-admin-panel-deploy-on-server-forbidden-403-csrf-verification-failed-re) for more);
 
 To set up variables in .env file, create it in the root directory of the project and fill it up like this:
 
@@ -46,6 +47,7 @@ ROLLBAR_POST_SERVER_ITEM_ACCESS_TOKEN=replace_me
 ROLLBAR_ENVIRONMENT=development
 DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/BASE_NAME
 POSTGRES_PASSWORD=replace_me
+CSRF_TRUSTED_ORIGINS=http://localhost
 ```
 
 ### Development installation
@@ -156,7 +158,6 @@ To find out more about debugging in Docker containers, see the VSCode documentat
 - [Debug Python within a container](https://code.visualstudio.com/docs/containers/debug-python);
 - [Debug Python with Docker Compose](https://code.visualstudio.com/docs/containers/docker-compose#_python);
 - [How to enable hot reloading in Django or Flask apps](https://code.visualstudio.com/docs/containers/debug-python#_how-to-enable-hot-reloading-in-django-or-flask-apps);
-
 
 ## Project goals
 
