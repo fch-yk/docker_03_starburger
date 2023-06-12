@@ -15,6 +15,9 @@ services:
       - type: volume
         source: media
         target: /app/media
+      - type: volume
+        source: bundles
+        target: /app/bundles
     expose:
       - 8000
     env_file: .env
@@ -25,8 +28,10 @@ services:
       context: .
       dockerfile: Dockerfile-frontend
     container_name: starburger-frontend
-    command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
-    restart: always
+    volumes:
+      - type: volume
+        source: bundles
+        target: /app/bundles
 
   db:
     image: postgres:15.3-alpine
@@ -62,3 +67,4 @@ volumes:
   media:
   static:
   postgres:
+  bundles:

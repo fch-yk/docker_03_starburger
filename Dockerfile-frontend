@@ -3,7 +3,9 @@ WORKDIR /app
 
 COPY /bundles-src ./bundles-src/
 COPY package*.json ./
-# RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-# USER appuser
+
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
 
 RUN npm ci --dev
+RUN ./node_modules/.bin/parcel build bundles-src/index.js --dist-dir bundles --public-url="./"

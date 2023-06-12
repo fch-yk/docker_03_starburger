@@ -16,7 +16,9 @@ The project was tested with Docker version 23.0.5 and Docker Compose version v2.
 
 ## Installation
 
-- Download the project files;
+### Files and environmental variables
+
+- Download the project files (or clone the project using git);
 - Go to the root directory of the project;
 - Set up environmental variables in the .env file. The variables are:
 
@@ -31,7 +33,7 @@ The project was tested with Docker version 23.0.5 and Docker Compose version v2.
   - `ROLLBAR_ENVIRONMENT` - a string that describes the current environment, for example `development` or `production` (optional, `development` by default). It is used in an error report to the [rollbar.com tracking platform](https://rollbar.com/);
   - `DATABASE_URL` - a database URL, see [URL schema](https://github.com/jazzband/dj-database-url#url-schema) for more (obligatory);
   - `POSTGRES_PASSWORD` is required for you to use the PostgreSQL image (obligatory), go to the [Docker hub](https://hub.docker.com/_/postgres) for more;
-  - `CSRF_TRUSTED_ORIGINS` is required for admin site correct work (go [here](https://stackoverflow.com/questions/71319284/django-admin-panel-deploy-on-server-forbidden-403-csrf-verification-failed-re) for more);
+  - `CSRF_TRUSTED_ORIGINS` is used for admin site correct work (optional, `http://localhost` by default), go [here](https://stackoverflow.com/questions/71319284/django-admin-panel-deploy-on-server-forbidden-403-csrf-verification-failed-re) for more;
 
 To set up variables in .env file, create it in the root directory of the project and fill it up like this:
 
@@ -50,26 +52,52 @@ POSTGRES_PASSWORD=replace_me
 CSRF_TRUSTED_ORIGINS=http://localhost
 ```
 
-### Development installation
+### Production installation
 
-Build the images and run the app stack:
+You can deploy the cloned git project with the [`deploy`](./deploy) script, which is in the root of the project.
+
+- Make the `deploy` file executable:
 
 ```bash
-docker compose -f compose-dev.yaml up -d --build
+chmod u+x deploy
 ```
 
-### Adding a superuser
-
-- Find out the `backend-dev` container id:
+- Deploy:
 
 ```bash
-docker ps | grep backend-dev
+./deploy
 ```
 
 - Create a superuser:
 
 ```bash
-docker exec -it {container_id} python manage.py createsuperuser
+docker exec -it -u 0 starburger-backend python manage.py createsuperuser
+```
+
+### Development installation
+
+- Build the images and run the app stack:
+
+```bash
+docker compose -f compose-dev.yaml up -d --build
+```
+
+- Collect static:
+
+```bash
+docker exec -u 0 starburger-backend python manage.py collectstatic
+```
+
+- Initialize a database:
+
+```bash
+docker exec -u 0 starburger-backend python manage.py migrate
+```
+
+- Create a superuser:
+
+```bash
+docker exec -it -u 0 starburger-backend python manage.py createsuperuser
 ```
 
 ### Usage
@@ -151,7 +179,7 @@ docker compose -f compose-debug-reload.yaml up -d --build
 
 Press `F5` to start debugging.
 
-_Note_: when debugging with hot reloading, uncheck the `Uncaught Exceptions` flag on the `Run and Debug` panel. This can help to avoid the annoing `Exception has occurred: SystemExit` message each time when you save an app file.
+_Note_: when debugging with hot reloading, uncheck the `Uncaught Exceptions` checkbox on the `Run and Debug` panel. This can help to avoid the annoing `Exception has occurred: SystemExit` message each time when you save an app file.
 
 To find out more about debugging in Docker containers, see the VSCode documentation:
 
