@@ -36,6 +36,11 @@ docker stop $frontend_container_name
 docker rm $frontend_container_name
 
 echo $line
+echo "Change owner for the media folder"
+docker stop $frontend_container_name
+docker exec -u 0 starburger-backend chown appuser -R media
+
+echo $line
 echo "The deploy completed successfully!"
 
 echo $line
