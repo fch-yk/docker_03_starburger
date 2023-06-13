@@ -7,6 +7,7 @@ tmp*.*
 *.code-workspace
 prod_static/
 staticfiles/
+create_venv
 
 bundles/**
 node_modules/
