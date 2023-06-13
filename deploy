@@ -31,7 +31,7 @@ echo migrate...
 docker exec -u 0 starburger-backend python manage.py migrate --noinput
 
 echo $line
-echo "Stop and remove the $frontend_container_name container (it is useless)"
+echo "Stop and remove the $frontend_container_name container which is no longer needed"
 docker stop $frontend_container_name
 docker rm $frontend_container_name
 

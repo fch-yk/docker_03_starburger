@@ -15,6 +15,9 @@ services:
       - type: volume
         source: bundles
         target: /app/bundles
+      - type: volume
+        source: media
+        target: /app/media
     ports:
       - target: 8000
         published: 8000
@@ -45,3 +48,4 @@ services:
 volumes:
   postgres:
   bundles:
+  media:
