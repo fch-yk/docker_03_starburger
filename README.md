@@ -23,7 +23,7 @@ The project was tested with Docker version 23.0.5 and Docker Compose version v2.
 - Set up environmental variables in the .env file. The variables are:
 
   - `SECRET_KEY` - a secret key for a particular Django installation (obligatory);
-  - `DEBUG` - a boolean that turns on/off debug mode (optional, `True` by default);
+  - `DEBUG` - a boolean that turns on/off debug mode (optional, `True` by default), this option should be `False` for the [Production installation](#production-installation) and `True` for the [Development installation](#development-installation);
   - `LANGUAGE_CODE` - a string representing the language code for this installation (optional, `ru-RU` by default);
   - `TIME_ZONE` - a string representing the time zone for this database connection(optional, `UTC` by default);
   - `YA_API_KEY` - your YANDEX API key (obligatory, go to [the develop cabinet](https://developer.tech.yandex.ru/) for more);
@@ -82,12 +82,6 @@ docker exec -it -u 0 starburger-backend python manage.py createsuperuser
 docker compose -f compose-dev.yaml up -d --build
 ```
 
-- Collect static:
-
-```bash
-docker exec -u 0 starburger-backend python manage.py collectstatic
-```
-
 - Initialize a database:
 
 ```bash
@@ -102,8 +96,12 @@ docker exec -it -u 0 starburger-backend python manage.py createsuperuser
 
 ### Usage
 
-- Go to [the admin site](http://127.0.0.1:8000/admin/) and fill the base;
-- Go to [the home page](http://127.0.0.1:8000/).
+- Go to [the admin site](http://127.0.0.1:8000/admin/) and fill the base:
+  - Add categories, for example `Roll`, `Burger`;
+  - Add products, for example `Fish roll`, `Beconizer`, `Long Cheese`, `Shrimp roll`, `Steak`, `Triple vopper`, `Vegetable burger` (you can find examples of images for the products in the [`img_examples`](img_examples) folder);
+  - Add restaurants (for example, `Burger West`, `Burger East`) and product items for each restaurant;
+
+- Go to [the home page](http://127.0.0.1:8000/) and order products;
 
 ## Interfaces
 

@@ -47,6 +47,17 @@ class RestaurantAdmin(admin.ModelAdmin):
             )
         return super().response_change(request, obj)
 
+    def response_add(self, request, obj):
+        try:
+            Location.save_location(obj.address)
+        except requests.ConnectionError:
+            logger.warning(
+                'Connection error. Location for restaurant %s'
+                ' was not saved',
+                obj
+            )
+        return super().response_add(request, obj)
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):

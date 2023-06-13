@@ -1,36 +1,41 @@
 services:
-  backend-dev:
+  backend:
     build:
       context: .
       dockerfile: Dockerfile-backend
+    container_name: starburger-backend
     depends_on:
       - frontend
       - db
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
-      - type: volume
-        source: media
-        target: /app/media
       - type: bind
         source: .
         target: /app
+      - type: volume
+        source: bundles
+        target: /app/bundles
     ports:
       - target: 8000
         published: 8000
         protocol: tcp
         mode: host
     env_file: .env
-    container_name: starburger-backend-dev
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile-frontend
-    command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
     container_name: starburger-frontend
+    command: ./node_modules/.bin/parcel watch bundles-src/index.js --dist-dir bundles --public-url="./"
+    volumes:
+      - type: volume
+        source: bundles
+        target: /app/bundles
 
   db:
     image: postgres:15.3-alpine
+    container_name: starburger-db
     volumes:
       - type: volume
         source: postgres
@@ -38,5 +43,5 @@ services:
     env_file: .env
 
 volumes:
-  media:
   postgres:
+  bundles:
