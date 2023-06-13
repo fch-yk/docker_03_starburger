@@ -25,7 +25,7 @@ The project was tested with Docker version 23.0.5 and Docker Compose version v2.
   - `SECRET_KEY` - a secret key for a particular Django installation (obligatory);
   - `DEBUG` - a boolean that turns on/off debug mode (optional, `True` by default), this option should be `False` for the [Production installation](#production-installation) and `True` for the [Development installation](#development-installation);
   - `LANGUAGE_CODE` - a string representing the language code for this installation (optional, `ru-RU` by default);
-  - `TIME_ZONE` - a string representing the time zone for this database connection(optional, `UTC` by default);
+  - `TIME_ZONE` - a string representing the time zone for this database connection (optional, `UTC` by default);
   - `YA_API_KEY` - your YANDEX API key (obligatory, go to [the develop cabinet](https://developer.tech.yandex.ru/) for more);
   - `ALLOWED_HOSTS` - a list of strings representing the host/domain names that this Django site can serve (optional, `localhost,127.0.0.1` by default);
   - `ROLLBAR_ON` - a boolean that turns on/off [rollbar.com tracking platform](https://rollbar.com/) (optional, `False` by default)
@@ -115,13 +115,13 @@ On [the home (public) page](http://127.0.0.1:8000/), a user can choose dishes an
 
 ### Manager interface
 
-On [the service (manager) page](http://127.0.0.1:8000/manager/orders/), a manager sees uncompleted orders, restaurants that can fulfill each order, distances between a restaurant and a place of delivery. Right from here the manager can go to a card of an order in the admin site, edit the order and return by clicking the "Save" button. If the manager chooses a restaurant for the order, the order's status will be changed automatically.
+On [the service (manager) page](http://127.0.0.1:8000/manager/orders/), a manager sees uncompleted orders, restaurants that can fulfill each order, distances between a restaurant and a place of delivery. Right from here, the manager can go to a card of an order in the admin site, edit the order and return by clicking the "Save" button. If the manager chooses a restaurant for the order, the order's status will be changed automatically.
 
 ![manager UI](./screenshots/manager_ui.gif)
 
 ### Browsable API interface
 
-A developer can use [the browsable API interface](http://127.0.0.1:8000/api/order/). It's possible to test order acceptance process here:
+A developer can use [the browsable API interface](http://127.0.0.1:8000/api/order/). It's possible to test the order acceptance process here:
 
 - Put JSON text into the "Content" field, for example:
 
@@ -139,7 +139,7 @@ A developer can use [the browsable API interface](http://127.0.0.1:8000/api/orde
 
 ![browsable API](./screenshots/developer_ui.gif)
 
-## Debugging with VSCode
+## Debugging with Visual Studio Code
 
 Add a launch configuration to the `.vscode/launch.json` file:
 
@@ -163,7 +163,7 @@ Add a launch configuration to the `.vscode/launch.json` file:
 }
 ```
 
-To debug , run:
+To debug, run:
 
 ```bash
 docker compose -f compose-debug.yaml up -d --build
@@ -177,9 +177,9 @@ docker compose -f compose-debug-reload.yaml up -d --build
 
 Press `F5` to start debugging.
 
-_Note_: when debugging with hot reloading, uncheck the `Uncaught Exceptions` checkbox on the `Run and Debug` panel. This can help to avoid the annoing `Exception has occurred: SystemExit` message each time when you save an app file.
+_Note_: when debugging with hot reloading, uncheck the `Uncaught Exceptions` checkbox on the `Run and Debug` panel. This can help to avoid the annoying `Exception has occurred: SystemExit` message each time when you save an app file.
 
-To find out more about debugging in Docker containers, see the VSCode documentation:
+To find out more about debugging in Docker containers, see the Visual Studio Code documentation:
 
 - [Debug Python within a container](https://code.visualstudio.com/docs/containers/debug-python);
 - [Debug Python with Docker Compose](https://code.visualstudio.com/docs/containers/docker-compose#_python);
